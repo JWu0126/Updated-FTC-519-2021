@@ -24,6 +24,8 @@ public abstract class BaseOpMode extends OpMode{
     protected DcMotor shooterLeft;
     protected DcMotor shooterRight;
 
+    protected MagneticLimitSwitch magneticLimitSwitch;
+
     // Uncomment if used
 //    DcMotor feeder;
 
@@ -31,8 +33,8 @@ public abstract class BaseOpMode extends OpMode{
     protected final int armUp = 0;
     protected final int acceptableRange = 30;
 
-    protected final double wobbleHandOpen = 0.5;
-    protected final double wobbleHandClosed = 0.5;
+    protected final double wobbleHandOpen = 0.7;
+    protected final double wobbleHandClosed = 1.0;
 
     @Override
     public void init() {
@@ -60,6 +62,7 @@ public abstract class BaseOpMode extends OpMode{
         wobbleGoalArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wobbleGoalArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        magneticLimitSwitch = new MagneticLimitSwitch(hardwareMap);
 
         // find the ring manipulator motors in app
         intake = hardwareMap.dcMotor.get("intake");
@@ -83,7 +86,7 @@ public abstract class BaseOpMode extends OpMode{
 
     protected void runShooter(double power) {
         shooterLeft.setPower(power);
-        shooterRight.setPower(power);
+        shooterRight.setPower(-power);
     }
 
     protected void setWobbleGoalArmDown() {

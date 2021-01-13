@@ -112,30 +112,21 @@ public class TeleOpSkeleton extends BaseTeleOp {
         }
 
         if (driver.left_trigger > 0.5) {
-            intake.setPower(1.0);
-        } else {
-            intake.setPower(0.0);
-        }
-
-        if (someControl) {
-            intake.setPower(-0.4);
-        }
-
-        if (driver.dpad_down) {
+            intake.setPower(0.7);
+            beltLeft.setPower(-1.0);
+            beltRight.setPower(1.0);
+        } else if (driver.left_bumper) {
+            intake.setPower(-0.7);
             beltLeft.setPower(1.0);
             beltRight.setPower(-1.0);
         } else {
+            intake.setPower(0.0);
             beltLeft.setPower(0.0);
             beltRight.setPower(0.0);
         }
 
-        if (driver.dpad_up) {
-            beltLeft.setPower(-1.0);
-            beltRight.setPower(1.0);
-        } else {
-            beltLeft.setPower(0.0);
-            beltRight.setPower(0.0);
+        if (magneticLimitSwitch.hasHitLimit()) {
+            telemetry.addLine("LIMIT SWITCH HAS BEEN HIT");
         }
-
     }
 }

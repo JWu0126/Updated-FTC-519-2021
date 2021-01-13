@@ -30,7 +30,7 @@ public abstract class BaseTeleOp extends BaseOpMode{
         super.start();
 
         // reset wobbleGoalHand to the "zeroed" position
-        wobbleGoalHand.setPosition(0.0);
+        wobbleGoalHand.setPosition(wobbleHandClosed);
     }
 
     // last years was different
@@ -44,7 +44,8 @@ public abstract class BaseTeleOp extends BaseOpMode{
     }
 
     protected void driveMotors(double x, double y, double z) {
-        y = -y;
+        // for whatever reason this doesn't need to be flipped. IDK, maybe something is backwards
+        //y = -y;
         backLeft.setPower(-x+y+z);
         backRight.setPower(y+x-z);
         frontLeft.setPower(y+x+z);
