@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.Recording;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.*;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,6 +39,9 @@ public class BlackBox {
             for (Map.Entry<String, Servo> entry : hardware.servo.entrySet()) {
                 recordDevice(entry.getKey(), time);
             }
+            for (Map.Entry<String, CRServo> entry : hardware.crservo.entrySet()) {
+                recordDevice(entry.getKey(), time);
+            }
         }
 
         /**
@@ -57,6 +57,8 @@ public class BlackBox {
                 value = ((DcMotor) device).getPower();
             } else if (device instanceof Servo) {
                 value = ((Servo) device).getPosition();
+            } else if (device instanceof CRServo) {
+                value = ((CRServo) device).getPower();
             } else {
                 return;
             }
@@ -105,6 +107,10 @@ public class BlackBox {
                     }
                     if (device instanceof Servo) {
                         ((Servo) device).setPosition(p.value);
+                    }
+
+                    if (device instanceof CRServo) {
+                        ((CRServo) device).setPower(p.value);
                     }
                 }
             }

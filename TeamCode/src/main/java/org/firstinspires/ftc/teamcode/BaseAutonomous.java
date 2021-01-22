@@ -8,8 +8,10 @@ public abstract class BaseAutonomous extends BaseOpMode{
     @Override
     public void init() {
         // call the parent class's init function
-        wobbleGoalHand.setPosition(wobbleHandClosed);
         super.init();
+        stepCounter = new StepCounter();
+        wobbleGoalHand.setPosition(wobbleHandClosed);
+
     }
 
     @Override
@@ -17,7 +19,7 @@ public abstract class BaseAutonomous extends BaseOpMode{
         super.start();
 
         // reset wobbleGoalHand to the "zeroed" position
-        wobbleGoalHand.setPosition(0.0);
+
     }
 
     // I think?

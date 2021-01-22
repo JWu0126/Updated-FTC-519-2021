@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import android.graphics.Bitmap;
 
 import android.graphics.Color;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -10,11 +11,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
+import org.firstinspires.ftc.teamcode.BaseAutonomous;
 import org.firstinspires.ftc.teamcode.BaseOpMode;
 
 
-// I'll leave it abstract for now
-public abstract class LeftRedSquareFinder extends BaseOpMode {
+@Autonomous(name = "SquareFinder", group = "test")
+public class LeftRedSquareFinder extends BaseAutonomous {
 
     Telemetry telemetry;
 
@@ -22,7 +24,7 @@ public abstract class LeftRedSquareFinder extends BaseOpMode {
     static final boolean PHONE_IS_PORTRAIT = false;
 
     static final String VUFORIA_KEY =
-            " --- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+            "AVjWNQH/////AAABmfTAg894fEL/rQj8b+u8l7Qw34HtrMgOnmf6xTlvK+Afn5EmrjzwTJ7/aTw0eGzNWdd0u+f1Rv8T8gH+kytJmYIPDIKOiLHuHJvMc0lwvEgKfiE33bZAoGW/ZoX2kyIHVWgr9I2yNKtE/SS4Ik4imJIJbe4QwFBMed02dz05R+j6Oi3wW4CutaknKYb5BH68RviV8b98QDV6FUwLa0u+biIkAEciicgHoQuDWCA2hrByaIEEm4XgXCF0H37hyv0Ra7SZsm6YMcTC2mNSIblMD77iL7MFyUoFdoQnykv+KJiNelhdjfswwCQWszNLYpqzwo56nAimSAr8s4C7Cub1GAlYVfq5XnG/7ZWH0oSg1x8T";
 
     VuforiaLocalizer vuforia = null;
     VuforiaLocalizer.CloseableFrame frame = null;
@@ -30,7 +32,8 @@ public abstract class LeftRedSquareFinder extends BaseOpMode {
     Image rawImage;
     Bitmap image;
 
-    protected void initialize() {
+    @Override
+    public void init() {
         telemetry.addLine("Initializing Vuforia things");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -105,4 +108,13 @@ public abstract class LeftRedSquareFinder extends BaseOpMode {
         }
     }
 
+    @Override
+    public void start() {
+        super.start();
+    }
+
+    @Override
+    public void loop() {
+        telemetry.addData("Location:", findSquare());
+    }
 }

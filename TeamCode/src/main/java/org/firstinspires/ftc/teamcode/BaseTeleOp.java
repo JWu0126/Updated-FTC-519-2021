@@ -45,7 +45,7 @@ public abstract class BaseTeleOp extends BaseOpMode{
 
     protected void driveMotors(double x, double y, double z) {
         // for whatever reason this doesn't need to be flipped. IDK, maybe something is backwards
-        //y = -y;
+        y = -y;
         backLeft.setPower(-x+y+z);
         backRight.setPower(y+x-z);
         frontLeft.setPower(y+x+z);

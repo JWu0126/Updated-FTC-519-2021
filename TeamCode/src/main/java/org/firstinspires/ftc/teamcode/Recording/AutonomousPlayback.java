@@ -25,7 +25,7 @@ public class AutonomousPlayback extends BaseOpMode {
     }
 
     public void init() {
-        vuforia = new Vuforia(this.hardwareMap);
+        //vuforia = new Vuforia(this.hardwareMap);
         super.init();
 
         // FIXME: These should be some values, but what they are now are not good, but
@@ -60,7 +60,7 @@ public class AutonomousPlayback extends BaseOpMode {
             }
         }*/
 
-
+        telemetry.addLine("In autonomous playback Loop");
 
         if (player == null) {
             try {
@@ -73,6 +73,7 @@ public class AutonomousPlayback extends BaseOpMode {
             }
         } else {
             try {
+                telemetry.addLine("Trying to loop");
                 player.playback(elapsedTime.time());
             } catch (Exception e) {
                 this.telemetry.addData("Can't play back auto", "!");
@@ -96,19 +97,34 @@ public class AutonomousPlayback extends BaseOpMode {
         }
     }*/
 
-    @Autonomous(name = "BluePark", group = "Competition")
-    public static class BluePark extends AutonomousPlayback {
-        public BluePark() {
-            super("BluePark");
+    @Autonomous(name = "Test Recording", group = "Competition")
+    public static class TestRecording extends AutonomousPlayback {
+        public TestRecording() {
+            super("TestRecording");
         }
     }
 
-    @Autonomous(name = "RedPark", group = "Competition")
-    public static class RedPark extends AutonomousPlayback {
-        public RedPark() {
-            super("RedPark");
+    @Autonomous(name = "RedLeftA", group = "Competition")
+    public static class RedLeftA extends AutonomousPlayback {
+        public RedLeftA() {
+            super("RedLeftA");
         }
     }
+
+    @Autonomous(name = "RedLeftB", group = "Competition")
+    public static class RedLeftB extends AutonomousPlayback {
+        public RedLeftB() {
+            super("RedLeftB");
+        }
+    }
+
+    @Autonomous(name = "RedLeftC", group = "Competition")
+    public static class RedLeftC extends AutonomousPlayback {
+        public RedLeftC() {
+            super("RedLeftC");
+        }
+    }
+
 
     @Autonomous(name = "BlueFoundationPark", group = "Competition")
     public static class BlueFoundationPark extends AutonomousPlayback {

@@ -55,7 +55,7 @@ public class TeleOpSkeleton extends BaseTeleOp {
             }
         }
 
-        if (slowMode) {
+        if (driver.dpad_down) {
             x /= 10;
             y /= 10;
             x /= 10;
@@ -95,22 +95,53 @@ public class TeleOpSkeleton extends BaseTeleOp {
         } else if (someControl) {
             setWobbleGoalArmDown();
         } else {
-            wobbleGoalArm.setPower(0.0);
+            //wobbleGoalArm.setPower(0.0);
+        }
+
+        if (driver.b) {
+            wobbleGoalHand.setPosition(wobbleHandOpen);
+        } else if (driver.y) {
+            wobbleGoalHand.setPosition(wobbleHandClosed);
+        }
+
+        telemetry.addData("touch limit", touchLimitSwitch.hasHitLimit());
+
+        telemetry.addData("magnetic limit", magneticLimitSwitch.hasHitLimit());
+
+        if (touchLimitSwitch.hasHitLimit() || magneticLimitSwitch.hasHitLimit()) {
+            if (touchLimitSwitch.hasHitLimit() && driver.a) {
+                wobbleGoalArm.setPower(0.3);
+            } else if (magneticLimitSwitch.hasHitLimit() && driver.x) {
+                wobbleGoalArm.setPower(-0.3);
+            } else {
+                wobbleGoalArm.setPower(0.0);
+            }
+        } else {
+            if (driver.x) {
+                wobbleGoalArm.setPower(-0.3);
+            } else if (driver.a) {
+                wobbleGoalArm.setPower(0.3);
+            } else {
+                wobbleGoalArm.setPower(0.0);
+            }
         }
 
         if (driver.right_trigger > 0.5) {
-            runShooter(-1.0);
+            runShooter(1.0);
+        } else if (driver.left_bumper) {
+            runShooter(0.5);
         } else {
             runShooter(0.0);
         }
 
         // reverse
         if (someControl) {
-            runShooter(1.0);
+            runShooter(-1.0);
         } else {
-            runShooter(0.0);
+        //    runShooter(0.0);
         }
 
+        // Make another control with one belt running
         if (driver.left_trigger > 0.5) {
             intake.setPower(0.7);
             beltLeft.setPower(-1.0);
@@ -119,14 +150,20 @@ public class TeleOpSkeleton extends BaseTeleOp {
             intake.setPower(-0.7);
             beltLeft.setPower(1.0);
             beltRight.setPower(-1.0);
+        } else if (gunner.a) {
+            beltLeft.setPower(-1.0);
+            beltRight.setPower(0.0);
+        } else if (gunner.b) {
+            intake.setPower(0.7);
+        } else if (gunner.x) {
+            intake.setPower(-0.7);
         } else {
             intake.setPower(0.0);
             beltLeft.setPower(0.0);
             beltRight.setPower(0.0);
         }
 
-        if (magneticLimitSwitch.hasHitLimit()) {
-            telemetry.addLine("LIMIT SWITCH HAS BEEN HIT");
-        }
+
+
     }
 }

@@ -24,7 +24,8 @@ public abstract class BaseOpMode extends OpMode{
     protected DcMotor shooterLeft;
     protected DcMotor shooterRight;
 
-    protected MagneticLimitSwitch magneticLimitSwitch;
+    protected LimitSwitch magneticLimitSwitch;
+    protected LimitSwitch touchLimitSwitch;
 
     // Uncomment if used
 //    DcMotor feeder;
@@ -33,8 +34,8 @@ public abstract class BaseOpMode extends OpMode{
     protected final int armUp = 0;
     protected final int acceptableRange = 30;
 
-    protected final double wobbleHandOpen = 0.7;
-    protected final double wobbleHandClosed = 1.0;
+    protected final double wobbleHandOpen = 0.3;
+    protected final double wobbleHandClosed = 0.6;
 
     @Override
     public void init() {
@@ -59,10 +60,11 @@ public abstract class BaseOpMode extends OpMode{
         wobbleGoalHand = hardwareMap.servo.get("wobble_goal_hand");
 
         wobbleGoalArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        wobbleGoalArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wobbleGoalArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //wobbleGoalArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //wobbleGoalArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        magneticLimitSwitch = new MagneticLimitSwitch(hardwareMap);
+        magneticLimitSwitch = new LimitSwitch(hardwareMap, "magLimit");
+        touchLimitSwitch = new LimitSwitch(hardwareMap, "touchLimit");
 
         // find the ring manipulator motors in app
         intake = hardwareMap.dcMotor.get("intake");
@@ -85,8 +87,8 @@ public abstract class BaseOpMode extends OpMode{
     }
 
     protected void runShooter(double power) {
-        shooterLeft.setPower(power);
-        shooterRight.setPower(-power);
+        shooterLeft.setPower(-power);
+        shooterRight.setPower(power);
     }
 
     protected void setWobbleGoalArmDown() {

@@ -44,7 +44,7 @@ public class RecordingTeleop extends TeleOpSkeleton {
     public void loop() {
         super.loop();
 
-        if (driver.x && (isRecordingMode == false)) {
+        if (driver.dpad_up && (isRecordingMode == false)) {
             isRecordingMode = true;
             if (isRecordingMode) {
                 if (recordTimer == null) {
@@ -95,14 +95,24 @@ public class RecordingTeleop extends TeleOpSkeleton {
     }*/
 
     // the recordings
-    @TeleOp(name = "RecordRedStoneLeft", group = "Recording")
-    public static class RecordRedStoneLeft extends RecordingTeleop {
-        public RecordRedStoneLeft() { super("RedStoneLeft"); }
+    @TeleOp(name = "Record Test Recording", group = "Recording")
+    public static class RecordTestRecording extends RecordingTeleop {
+        public RecordTestRecording() { super("TestRecording"); }
     }
 
-    @TeleOp(name = "RecordRedStoneCenter", group = "Recording")
-    public static class RecordRedStoneCenter extends RecordingTeleop {
-        public RecordRedStoneCenter() { super("RedStoneCenter"); }
+    @TeleOp(name = "RedLeftARecord", group = "Recording")
+    public static class RedLeftARecord extends RecordingTeleop {
+        public RedLeftARecord() { super("RedLeftA"); }
+    }
+
+    @TeleOp(name = "RedLeftBRecord", group = "Recording")
+    public static class RedLeftBRecord extends RecordingTeleop {
+        public RedLeftBRecord() { super("RedLeftB"); }
+    }
+
+    @TeleOp(name = "RedLeftCRecord", group = "Recording")
+    public static class RedLeftCRecord extends RecordingTeleop {
+        public RedLeftCRecord() { super("RedLeftC"); }
     }
 
     @TeleOp(name = "RecordRedStoneRight", group = "Recording")

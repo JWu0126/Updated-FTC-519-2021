@@ -25,7 +25,7 @@ public class LeftRedWobbleGoal extends BaseAutonomous {
     @Override
     public void init() {
         super.init();
-        leftRedSquareFinder.initialize();
+        //leftRedSquareFinder.initialize();
     }
 
     @Override
