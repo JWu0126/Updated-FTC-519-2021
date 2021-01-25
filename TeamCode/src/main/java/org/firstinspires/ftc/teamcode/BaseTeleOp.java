@@ -46,10 +46,10 @@ public abstract class BaseTeleOp extends BaseOpMode{
     protected void driveMotors(double x, double y, double z) {
         // for whatever reason this doesn't need to be flipped. IDK, maybe something is backwards
         y = -y;
-        backLeft.setPower(-x+y+z);
-        backRight.setPower(y+x-z);
-        frontLeft.setPower(y+x+z);
-        frontRight.setPower(y-x-z);
+        backLeft.setPower((-x+y+z)*0.9);
+        backRight.setPower((y+x-z)*0.9);
+        frontLeft.setPower((y+x+z)*1.1);
+        frontRight.setPower((y-x-z)*1.1);
     }
 
     protected float applyDeadZone(float joystickValue) {

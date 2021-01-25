@@ -8,14 +8,16 @@ import org.firstinspires.ftc.teamcode.BaseTeleOp;
 import java.security.Policy;
 
 // CHANGE NAMES LATER!!!
-@TeleOp(name = "Don't use this one", group = "Not Main")
+@TeleOp(name = "Main TeleOp", group = "Not Main")
 public class TeleOpSkeleton extends BaseTeleOp {
     // presumably going to need multiple versions of teleop because two days comp
 
     private ElapsedTime elapsedTime;
-    private boolean buttonPressed = false;
-    private boolean buttonJustReleased = false;
+
+    private boolean previouslyPressed = false;
+    private boolean isPreviouslyPressed = false;
     private boolean handOpen = true;
+    private boolean slowMode = false;
 
     @Override
     public void init() {
@@ -47,92 +49,97 @@ public class TeleOpSkeleton extends BaseTeleOp {
             y = -y;
         }
 
-        // hopefully this works the way I think it will
-        if (someControl) {
-            elapsedTime.startTime();
-            if (elapsedTime.seconds() >= 0.1) {
+        if (isPreviouslyPressed) {
+            if (!driver.b) {
+                isPreviouslyPressed = false;
+            }
+        } else {
+            if (driver.b) {
+                // just to switch between the two states
                 slowMode = !slowMode;
+                isPreviouslyPressed = true;
+            } else {
+                isPreviouslyPressed = false;
             }
         }
 
-        if (driver.dpad_down) {
-            x /= 10;
-            y /= 10;
-            x /= 10;
+        // this time the if is outside the state machine so that it will constantly change the state of the drive
+        // motors
+        if (slowMode) {
+            x = x*0.5f;
+            y = y*0.5f;
+            z = z*0.5f;
         }
 
+        telemetry.addData("Slow mode: ", slowMode);
         driveMotors(x, y, z);
 
-        // if it was released previously, then check if its pressed NOW
-        if (buttonJustReleased) {
-            if (someControl) {
-                buttonPressed = true;
+        /***    -----------------------------------------------------------------------------------------------------------     */
+
+        // toggle for driver.x
+        if (previouslyPressed) {
+            // if the button was previously pressed then check if its pressed NOW
+            // if not then change previously pressed to false
+            if (!driver.x) {
+                previouslyPressed = false;
             }
-        }
-
-        // if it was pressed now then see if its not anymore, if its not then change positions.
-        // I think this works.
-        // Basically works on release of the button
-        if (buttonPressed) {
-            if (!someControl) {
-                buttonJustReleased = true;
-
+        } else {
+            // if the button was NOT previously pressed then check if it's pressed NOW
+            // if it is than that means this was the point where it changed states.
+            if (driver.x) {
                 // just to switch between the two states
+                // this is inside the state machine because it only needs to be set once
                 if (handOpen) {
                     wobbleGoalHand.setPosition(wobbleHandClosed);
                 } else {
                     wobbleGoalHand.setPosition(wobbleHandOpen);
                 }
+                handOpen = !handOpen;
+                previouslyPressed = true;
+            } else {
+                previouslyPressed = false;
             }
         }
 
-/***    -----------------------------------------------------------------------------------------------------------     */
+//        if (driver.b) {
+//            wobbleGoalHand.setPosition(wobbleHandOpen);
+//        } else if (driver.y) {
+//            wobbleGoalHand.setPosition(wobbleHandClosed);
+//        }
 
-        // edit the power to be better for all of these
-        // Figure out how these controls are being used (ie. toggle, hold, whatever)
-        if (someControl) {
-            setWobbleGoalArmUp();
-        } else if (someControl) {
-            setWobbleGoalArmDown();
-        } else {
-            //wobbleGoalArm.setPower(0.0);
-        }
-
-        if (driver.b) {
-            wobbleGoalHand.setPosition(wobbleHandOpen);
-        } else if (driver.y) {
-            wobbleGoalHand.setPosition(wobbleHandClosed);
-        }
-
+        // makes the limit switch work one way and not the other
         telemetry.addData("touch limit", touchLimitSwitch.hasHitLimit());
 
         telemetry.addData("magnetic limit", magneticLimitSwitch.hasHitLimit());
 
         if (touchLimitSwitch.hasHitLimit() || magneticLimitSwitch.hasHitLimit()) {
             if (touchLimitSwitch.hasHitLimit() && driver.a) {
-                wobbleGoalArm.setPower(0.3);
-            } else if (magneticLimitSwitch.hasHitLimit() && driver.x) {
-                wobbleGoalArm.setPower(-0.3);
+                wobbleGoalArm.setPower(0.6);
+            } else if (magneticLimitSwitch.hasHitLimit() && driver.y) {
+                wobbleGoalArm.setPower(-0.6);
             } else {
                 wobbleGoalArm.setPower(0.0);
             }
         } else {
-            if (driver.x) {
-                wobbleGoalArm.setPower(-0.3);
+            if (driver.y) {
+                wobbleGoalArm.setPower(-0.6);
             } else if (driver.a) {
-                wobbleGoalArm.setPower(0.3);
+                wobbleGoalArm.setPower(0.6);
             } else {
                 wobbleGoalArm.setPower(0.0);
             }
         }
 
-        if (driver.right_trigger > 0.5) {
-            runShooter(1.0);
-        } else if (driver.left_bumper) {
-            runShooter(0.5);
+        // the triggers are analog values
+        if (driver.right_trigger > 0.1) {
+            runShooter(driver.right_trigger);
+        } else if (driver.right_bumper) {
+            runShooter(0.75);
         } else {
             runShooter(0.0);
         }
+
+        telemetry.addData("Flywheel Speed", driver.right_trigger);
 
         // reverse
         if (someControl) {
@@ -146,17 +153,22 @@ public class TeleOpSkeleton extends BaseTeleOp {
             intake.setPower(0.7);
             beltLeft.setPower(-1.0);
             beltRight.setPower(1.0);
+
         } else if (driver.left_bumper) {
             intake.setPower(-0.7);
             beltLeft.setPower(1.0);
             beltRight.setPower(-1.0);
-        } else if (gunner.a) {
+
+        } else if (driver.dpad_left) {
             beltLeft.setPower(-1.0);
             beltRight.setPower(0.0);
+
         } else if (gunner.b) {
             intake.setPower(0.7);
+
         } else if (gunner.x) {
             intake.setPower(-0.7);
+
         } else {
             intake.setPower(0.0);
             beltLeft.setPower(0.0);
