@@ -104,6 +104,9 @@ public class AutonomousPlayback extends BaseOpMode {
         }
     }
 
+    // 0 - A
+    // 1 - b
+    // 4 - C
     @Autonomous(name = "RedLeftA", group = "Competition")
     public static class RedLeftA extends AutonomousPlayback {
         public RedLeftA() {

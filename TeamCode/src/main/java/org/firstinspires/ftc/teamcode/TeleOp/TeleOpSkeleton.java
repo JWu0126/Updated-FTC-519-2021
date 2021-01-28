@@ -17,7 +17,7 @@ public class TeleOpSkeleton extends BaseTeleOp {
     private boolean previouslyPressed = false;
     private boolean isPreviouslyPressed = false;
     private boolean handOpen = true;
-    private boolean slowMode = false;
+    private boolean slowMode = true;
 
     @Override
     public void init() {
@@ -66,6 +66,10 @@ public class TeleOpSkeleton extends BaseTeleOp {
         // this time the if is outside the state machine so that it will constantly change the state of the drive
         // motors
         if (slowMode) {
+            x = x*0.33f;
+            y = y*0.33f;
+            z = z*0.33f;
+        } else {
             x = x*0.5f;
             y = y*0.5f;
             z = z*0.5f;
@@ -89,7 +93,7 @@ public class TeleOpSkeleton extends BaseTeleOp {
             if (driver.x) {
                 // just to switch between the two states
                 // this is inside the state machine because it only needs to be set once
-                if (handOpen) {
+                if (!handOpen) {
                     wobbleGoalHand.setPosition(wobbleHandClosed);
                 } else {
                     wobbleGoalHand.setPosition(wobbleHandOpen);
