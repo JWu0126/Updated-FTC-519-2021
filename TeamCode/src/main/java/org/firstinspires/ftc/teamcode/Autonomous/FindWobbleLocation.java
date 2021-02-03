@@ -3,16 +3,14 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.BaseAutonomous;
-import org.firstinspires.ftc.teamcode.Recording.AutonomousPlayback;
 import org.firstinspires.ftc.teamcode.Recording.BlackBox;
 import org.firstinspires.ftc.teamcode.Recording.PersistentFileInputStream;
-import org.firstinspires.ftc.teamcode.StepCounter;
 
 @Autonomous(name = "Red Left Side Setup", group = "test")
 public class FindWobbleLocation extends BaseAutonomous {
-    LeftLocationFinder leftLocationFinder;
+    LocationFinder locationFinder;
 
-    LeftLocationFinder.location location;
+    LocationFinder.location location;
 //
 //    AutonomousPlayback.RedLeftA redLeftA;
 //    AutonomousPlayback.RedLeftB redLeftB;
@@ -26,7 +24,7 @@ public class FindWobbleLocation extends BaseAutonomous {
     @Override
     public void init() {
         super.init();
-        leftLocationFinder = new LeftLocationFinder(hardwareMap) {
+        locationFinder = new LocationFinder(hardwareMap) {
             @Override
             public void loop() {}
         };
@@ -42,10 +40,11 @@ public class FindWobbleLocation extends BaseAutonomous {
         switch (stepCounter.getStep()) {
             case 1:
 
-                location = leftLocationFinder.find();
+                location = locationFinder.find();
                 telemetry.addData("The Wobble Goal Location is at ", location);
                 stepCounter.next();
                 break;
+
             case 2:
                 // it seems that the init function causes issues
                 // after commenting out the super.init line it returned to the same issue that it had before.
@@ -86,23 +85,12 @@ public class FindWobbleLocation extends BaseAutonomous {
 
                 stepCounter.next();
                 break;
+
             case 3:
                 // It never enters the loop function
                 // I guessed that it was because it never went through its init phase so I did that in the previous case
                 // This caused it to give an error that said there was a null pointer reference with a dc motor
                 telemetry.addData("Going to ", location);
-//                switch (location) {
-//                    case CLOSE:
-//                        //redLeftA.loop();
-//                        break;
-//                    case MED:
-//                        //redLeftB.loop();
-//                        break;
-//                    case FAR:
-//                        telemetry.addLine("chosen the C path");
-//                        //redLeftC.loop();
-//                        break;
-//                }
 
                 if (player == null) {
                     try {
@@ -116,12 +104,23 @@ public class FindWobbleLocation extends BaseAutonomous {
                 } else {
                     try {
                         telemetry.addLine("Trying to loop");
-                        player.playback(elapsedTime.time());
+                        boolean hasMoreEvents = player.playback(elapsedTime.time());
+                        if (!hasMoreEvents) {
+                            stepCounter.next();
+                        }
                     } catch (Exception e) {
                         this.telemetry.addData("Can't play back auto", "!");
                     }
                 }
 
+                break;
+
+            case 4:
+                telemetry.addLine("Finished playback");
+                stepCounter.next();
+                break;
+
+            case 5:
                 break;
         }
     }

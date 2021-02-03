@@ -13,30 +13,36 @@ public class TeleOpSkeleton extends BaseTeleOp {
     // presumably going to need multiple versions of teleop because two days comp
 
     private ElapsedTime elapsedTime;
+    private ElapsedTime rpmTimer;
 
     private boolean previouslyPressed = false;
     private boolean isPreviouslyPressed = false;
     private boolean handOpen = true;
     private boolean slowMode = true;
+    private int shooterEncoderPreviousPosition;
 
     @Override
     public void init() {
         elapsedTime = new ElapsedTime();
+        rpmTimer = new ElapsedTime();
         elapsedTime.reset();
+        rpmTimer.reset();
         super.init();
-
+        shooterEncoderPreviousPosition = 0;
     }
 
     @Override
     public void start() {
         super.start();
         elapsedTime.startTime();
-
+        rpmTimer.startTime();
+        shooterEncoderPreviousPosition = shooterLeft.getCurrentPosition();
     }
 
     @Override
     public void loop() {
         telemetry.addData("Time Passed: ", elapsedTime.seconds());
+
 
         // add in controls, change as needed
 
@@ -145,11 +151,11 @@ public class TeleOpSkeleton extends BaseTeleOp {
 
         telemetry.addData("Flywheel Speed", driver.right_trigger);
 
-        // reverse
-        if (someControl) {
-            runShooter(-1.0);
-        } else {
-        //    runShooter(0.0);
+        if (rpmTimer.seconds() >= 1.0d) {
+            int shooterEncoderCurrentPosition = shooterLeft.getCurrentPosition();
+            telemetry.addData("Flywheel RPM", getShooterRPM(rpmTimer.seconds(), shooterEncoderPreviousPosition, shooterEncoderCurrentPosition));
+            shooterEncoderPreviousPosition = shooterEncoderCurrentPosition;
+            rpmTimer.reset();
         }
 
         // Make another control with one belt running

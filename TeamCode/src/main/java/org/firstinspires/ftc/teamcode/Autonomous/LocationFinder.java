@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Vuforia;
 
 import java.util.List;
 
-public abstract class LeftLocationFinder extends BaseAutonomous{
+public abstract class LocationFinder extends BaseAutonomous{
     Vuforia vuforia;
     private TFObjectDetector tfod;
 
@@ -23,7 +23,7 @@ public abstract class LeftLocationFinder extends BaseAutonomous{
 
     // private Telemetry telemetry = new TelemetryImpl(this);
 
-    LeftLocationFinder(HardwareMap map) {
+    LocationFinder(HardwareMap map) {
         vuforia = new Vuforia(map);
         initTfod(map);
 

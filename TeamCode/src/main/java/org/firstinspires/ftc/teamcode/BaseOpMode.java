@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public abstract class BaseOpMode extends OpMode{
 
+    public static final int SECONDS_PER_MINUTE = 60;
     // declare motors and servos
     protected DcMotor frontLeft;
     protected DcMotor frontRight;
@@ -72,7 +73,12 @@ public abstract class BaseOpMode extends OpMode{
         beltRight = hardwareMap.crservo.get("belt_right");
 
         shooterLeft = hardwareMap.dcMotor.get("shooter_left");
+        shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         shooterRight = hardwareMap.dcMotor.get("shooter_right");
+        shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // set shooter and intake to "float" at zero to maintain rotation
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -89,6 +95,10 @@ public abstract class BaseOpMode extends OpMode{
     protected void runShooter(double power) {
         shooterLeft.setPower(-power);
         shooterRight.setPower(power);
+    }
+
+    protected static double getShooterRPM(double elapsedTimeInSeconds, int previousPosition, int currentPosition) {
+        return ((currentPosition - previousPosition) * SECONDS_PER_MINUTE)/elapsedTimeInSeconds;
     }
 
     protected void setWobbleGoalArmDown() {
