@@ -1,24 +1,22 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.BaseTeleOp;
 
-import java.security.Policy;
-
-// CHANGE NAMES LATER!!!
-@TeleOp(name = "Main TeleOp", group = "Not Main")
-public class TeleOpSkeleton extends BaseTeleOp {
-    // presumably going to need multiple versions of teleop because two days comp
+@TeleOp(name = "Encoder TeleOp", group = "Not Main")
+public class EncoderDriveTrainTeleOp extends BaseTeleOp {
 
     private ElapsedTime elapsedTime;
     private ElapsedTime rpmTimer;
 
-    private boolean previouslyPressed = false;
-    private boolean isPreviouslyPressed = false;
+    private boolean driverxIsPreviouslyPressed = false;
+    private boolean driverbIsPreviouslyPressed = false;
+    private boolean driverTriggerIsPreviouslyFlicked = false;
     private boolean handOpen = true;
-    private boolean slowMode = true;
+    private boolean slowMode = false;
+    private boolean shooterOn = false;
     private int shooterEncoderPreviousPosition;
 
     @Override
@@ -29,6 +27,14 @@ public class TeleOpSkeleton extends BaseTeleOp {
         rpmTimer.reset();
         super.init();
         shooterEncoderPreviousPosition = 0;
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -55,30 +61,30 @@ public class TeleOpSkeleton extends BaseTeleOp {
             y = -y;
         }
 
-        if (isPreviouslyPressed) {
+        if (driverbIsPreviouslyPressed) {
             if (!driver.b) {
-                isPreviouslyPressed = false;
+                driverbIsPreviouslyPressed = false;
             }
         } else {
             if (driver.b) {
                 // just to switch between the two states
                 slowMode = !slowMode;
-                isPreviouslyPressed = true;
+                driverbIsPreviouslyPressed = true;
             } else {
-                isPreviouslyPressed = false;
+                driverbIsPreviouslyPressed = false;
             }
         }
 
         // this time the if is outside the state machine so that it will constantly change the state of the drive
         // motors
         if (slowMode) {
-            x = x*0.33f;
-            y = y*0.33f;
-            z = z*0.33f;
+            x = x*0.2f;
+            y = y*0.2f;
+            z = z*0.2f;
         } else {
-            x = x*0.5f;
-            y = y*0.5f;
-            z = z*0.5f;
+            x = x*0.42f;
+            y = y*0.42f;
+            z = z*0.42f;
         }
 
         telemetry.addData("Slow mode: ", slowMode);
@@ -87,11 +93,11 @@ public class TeleOpSkeleton extends BaseTeleOp {
         /***    -----------------------------------------------------------------------------------------------------------     */
 
         // toggle for driver.x
-        if (previouslyPressed) {
+        if (driverxIsPreviouslyPressed) {
             // if the button was previously pressed then check if its pressed NOW
             // if not then change previously pressed to false
             if (!driver.x) {
-                previouslyPressed = false;
+                driverxIsPreviouslyPressed = false;
             }
         } else {
             // if the button was NOT previously pressed then check if it's pressed NOW
@@ -105,9 +111,9 @@ public class TeleOpSkeleton extends BaseTeleOp {
                     wobbleGoalHand.setPosition(wobbleHandOpen);
                 }
                 handOpen = !handOpen;
-                previouslyPressed = true;
+                driverxIsPreviouslyPressed = true;
             } else {
-                previouslyPressed = false;
+                driverxIsPreviouslyPressed = false;
             }
         }
 
@@ -140,14 +146,39 @@ public class TeleOpSkeleton extends BaseTeleOp {
             }
         }
 
-        // the triggers are analog values
-        if (driver.right_trigger > 0.1) {
-            runShooter(driver.right_trigger);
+        if (driverTriggerIsPreviouslyFlicked) {
+            // the triggers are analog values
+            if (!(driver.right_trigger > 0.7)) {
+                driverTriggerIsPreviouslyFlicked = false;
+            }
+        } else {
+            if (driver.right_trigger > 0.7) {
+                // just to switch between the two states
+                shooterOn = !shooterOn;
+                driverTriggerIsPreviouslyFlicked = true;
+            } else {
+                driverTriggerIsPreviouslyFlicked = false;
+            }
+        }
+
+
+        if (shooterOn) {
+            // 85.5 is the magic number for shooting from the line
+            runShooter(0.855);
         } else if (driver.right_bumper) {
-            runShooter(0.75);
+            runShooter(0.83);
         } else {
             runShooter(0.0);
         }
+
+        // the triggers are analog values
+
+//        else if (driver.right_bumper) {
+//
+//            runShooter(0.83);
+//        } else {
+//            runShooter(0.0);
+//        }
 
         telemetry.addData("Flywheel Speed", driver.right_trigger);
 
@@ -162,7 +193,7 @@ public class TeleOpSkeleton extends BaseTeleOp {
         if (driver.left_trigger > 0.5) {
             intake.setPower(0.7);
             beltLeft.setPower(-1.0);
-            beltRight.setPower(1.0);
+            beltRight.setPower(0.5);
 
         } else if (driver.left_bumper) {
             intake.setPower(-0.7);

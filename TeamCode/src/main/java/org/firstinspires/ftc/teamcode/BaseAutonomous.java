@@ -46,17 +46,17 @@ public abstract class BaseAutonomous extends BaseOpMode{
     }
 
     public void pivotRight() {
-        frontLeft.setPower(0.5);
-        frontRight.setPower(-0.5);
-        backLeft.setPower(0.5);
-        backRight.setPower(-0.5);
+        frontLeft.setPower(0.3);
+        frontRight.setPower(-0.3);
+        backLeft.setPower(0.3);
+        backRight.setPower(-0.3);
     }
 
     public void pivotLeft() {
-        frontLeft.setPower(-0.5);
-        frontRight.setPower(0.5);
-        backLeft.setPower(-0.5);
-        backRight.setPower(0.5);
+        frontLeft.setPower(-0.3);
+        frontRight.setPower(0.3);
+        backLeft.setPower(-0.3);
+        backRight.setPower(0.3);
     }
 
     public void stopMoving() {

@@ -2,9 +2,10 @@ package org.firstinspires.ftc.teamcode.Recording;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.TeleOp.EncoderDriveTrainTeleOp;
 import org.firstinspires.ftc.teamcode.TeleOp.MainTeleOp;
 
-public class RecordingTeleop extends MainTeleOp {
+public class EncoderRecordingTeleOp extends EncoderDriveTrainTeleOp {
 
     private String recordingName;
     private PersistentFileOutputStream outputStream;
@@ -13,7 +14,7 @@ public class RecordingTeleop extends MainTeleOp {
     private ElapsedTime recordTimer;
     private RecordingThread recordingThread;
 
-    public RecordingTeleop(String name) {
+    public EncoderRecordingTeleOp(String name) {
         this.recordingName = name;
     }
 
@@ -39,6 +40,7 @@ public class RecordingTeleop extends MainTeleOp {
 
         this.recordingThread = new RecordingThread(this.recorder, this.hardwareMap);
     }
+
     @Override
     public void loop() {
         super.loop();
@@ -84,60 +86,25 @@ public class RecordingTeleop extends MainTeleOp {
         }
     }
 
-   /*@TeleOp(name = "RecordRed", group = "Recording")
-    public static class RecordRed extends RecordingTeleop {
-        public RecordRed() { super("RedNoStone"); }
-    }
-    @TeleOp(name = "RecordBlue", group = "Recording")
-    public static class RecordBlue extends RecordingTeleop {
-        public RecordBlue() { super("BlueNoStone"); }
-    }*/
 
-    // the recordings
-    @TeleOp(name = "Record Test Recording", group = "Recording")
-    public static class RecordTestRecording extends RecordingTeleop {
-        public RecordTestRecording() { super("TestRecording"); }
-    }
-
-    @TeleOp(name = "RedLeftARecord", group = "Recording")
-    public static class RedLeftARecord extends RecordingTeleop {
-        public RedLeftARecord() { super("RedLeftA"); }
-    }
-
-    @TeleOp(name = "RedLeftBRecord", group = "Recording")
-    public static class RedLeftBRecord extends RecordingTeleop {
-        public RedLeftBRecord() { super("RedLeftB"); }
-    }
-
-    @TeleOp(name = "RedLeftCRecord", group = "Recording")
-    public static class RedLeftCRecord extends RecordingTeleop {
-        public RedLeftCRecord() { super("RedLeftC"); }
-    }
-
-    @TeleOp(name = "RedLeftAShootRecord", group = "Recording")
-    public static class RedLeftAShootRecord extends RecordingTeleop {
-        public RedLeftAShootRecord() { super("RedLeftAShoot"); }
-    }
-
-
-    @TeleOp(name = "RedLeftBShootRecord", group = "Recording")
-    public static class RedLeftBShootRecord extends RecordingTeleop {
-        public RedLeftBShootRecord() {
-            super("RedLeftBShoot");
+    @TeleOp(name = "EncoderRedLeftCShootRecord", group = "Recording")
+    public static class EncoderRedLeftCShootRecord extends EncoderRecordingTeleOp {
+        public EncoderRedLeftCShootRecord() {
+            super("EncoderRedLeftCShoot");
         }
     }
 
-    @TeleOp(name = "RedLeftCShootRecord", group = "Recording")
-    public static class RedLeftCShootRecord extends RecordingTeleop {
-        public RedLeftCShootRecord() {
-            super("RedLeftCShoot");
+    @TeleOp(name = "EncoderRedLeftBShootRecord", group = "Recording")
+    public static class EncoderRedLeftBShootRecord extends EncoderRecordingTeleOp {
+        public EncoderRedLeftBShootRecord() {
+            super("EncoderRedLeftBShoot");
         }
     }
 
-    @TeleOp(name = "RecordBlueBlockFoundationPark", group = "Recording")
-    public static class BlueBlockFoundationPark extends RecordingTeleop {
-        public BlueBlockFoundationPark() {
-            super("BlueBlockFoundationPark");
+    @TeleOp(name = "EncoderRedLeftAShootRecord", group = "Recording")
+    public static class EncoderRedLeftAShootRecord extends EncoderRecordingTeleOp {
+        public EncoderRedLeftAShootRecord() {
+            super("EncoderRedLeftAShoot");
         }
     }
 

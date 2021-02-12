@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Recording.BlackBox;
 import org.firstinspires.ftc.teamcode.Recording.PersistentFileInputStream;
 
 @Autonomous(name = "Red Left Side Setup", group = "test")
-public class FindWobbleLocation extends BaseAutonomous {
+public class LeftRedWobbleGoalSetUp extends BaseAutonomous {
     LocationFinder locationFinder;
 
     LocationFinder.location location;

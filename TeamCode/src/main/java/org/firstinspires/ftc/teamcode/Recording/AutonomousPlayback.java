@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Recording;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BaseOpMode;
@@ -70,6 +71,8 @@ public class AutonomousPlayback extends BaseOpMode {
                 elapsedTime.reset();
             } catch (Exception e) {
                 this.telemetry.addData("Can't create player", "!");
+                this.telemetry.addData("Recording Name: ", recordingName);
+                this.telemetry.addData("Message: ", e.getMessage());
             }
         } else {
             try {
@@ -129,31 +132,84 @@ public class AutonomousPlayback extends BaseOpMode {
     }
 
 
-    @Autonomous(name = "BlueFoundationPark", group = "Competition")
-    public static class BlueFoundationPark extends AutonomousPlayback {
-        public BlueFoundationPark() {
-            super("BlueFoundationPark");
+    @Autonomous(name = "RedLeftAShoot", group = "Competition")
+    public static class RedLeftAShoot extends AutonomousPlayback {
+        public RedLeftAShoot() {
+            super("RedLeftAShoot");
         }
     }
 
-    @Autonomous(name = "RedFoundationPark", group = "Competition")
-    public static class RedFoundationPark extends AutonomousPlayback {
-        public RedFoundationPark() {
-            super("RedFoundationPark");
+    @Autonomous(name = "RedLeftBShoot", group = "Competition")
+    public static class RedLeftBShoot extends AutonomousPlayback {
+        public RedLeftBShoot() {
+            super("RedLeftBShoot");
         }
     }
 
-    @Autonomous(name = "RedBlockFoundationPark", group = "Competition")
-    public static class RedBlockFoundationPark extends AutonomousPlayback {
-        public RedBlockFoundationPark() {
-            super("RedBlockFoundationPark");
+    @Autonomous(name = "RedLeftCShoot", group = "Competition")
+    public static class RedLeftCShoot extends AutonomousPlayback {
+        public RedLeftCShoot() {
+            super("RedLeftCShoot");
         }
     }
 
-    @Autonomous(name = "BlueBlockFoundationPark", group = "Competition")
-    public static class BlueBlockFoundationPark extends AutonomousPlayback {
-        public BlueBlockFoundationPark() {
-            super("BlueBlockFoundationPark");
+    @Autonomous(name = "EncoderRedLeftCShoot", group = "Competition")
+    public static class EncoderRedLeftCShoot extends AutonomousPlayback {
+        public EncoderRedLeftCShoot() {
+            super("EncoderRedLeftCShoot");
+        }
+
+        @Override
+        public void init() {
+            super.init();
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    @Autonomous(name = "EncoderRedLeftBShoot", group = "Competition")
+    public static class EncoderRedLeftBShoot extends AutonomousPlayback {
+        public EncoderRedLeftBShoot() {
+            super("EncoderRedLeftBShoot");
+        }
+
+        @Override
+        public void init() {
+            super.init();
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    @Autonomous(name = "EncoderRedLeftAShoot", group = "Competition")
+    public static class EncoderRedLeftAShoot extends AutonomousPlayback {
+        public EncoderRedLeftAShoot() {
+            super("EncoderRedLeftAShoot");
+        }
+
+        @Override
+        public void init() {
+            super.init();
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 }
